@@ -117,7 +117,7 @@ jobs:
         run: |
           mkdir -p ../artifacts
           if [[ "${{ runner.os }}" == "macOS" ]]; then
-            find bazel-bin -name "grpc_python_plugin" -type f -executable | head -1 | xargs -I {} cp {} ../artifacts/${{ matrix.artifact_name }}
+            find bazel-bin -name "grpc_python_plugin" -type f -perm +111 | head -1 | xargs -I {} cp {} ../artifacts/${{ matrix.artifact_name }}
           else
             cp bazel-bin/src/compiler/grpc_python_plugin ../artifacts/${{ matrix.artifact_name }}
           fi
