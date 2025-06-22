@@ -82,6 +82,10 @@ jobs:
           bazelisk-cache: true
           disk-cache: ${{ github.workflow }}-${{ matrix.platform }}
           repository-cache: true
+          bazelrc: |
+            build --color=yes
+            build --curses=yes
+            build --show_timestamps
 
       - name: Checkout gRPC repository
         uses: actions/checkout@v4
