@@ -1,0 +1,24 @@
+# Act configuration for local testing
+# This allows testing GitHub Actions workflows locally
+
+# Use larger Docker images for better compatibility
+-P ubuntu-latest=catthehacker/ubuntu:act-latest
+-P ubuntu-22.04=catthehacker/ubuntu:act-22.04
+-P ubuntu-20.04=catthehacker/ubuntu:act-20.04
+
+# Use GitHub runners for macOS (requires GitHub runners or skip)
+-P macos-latest=catthehacker/ubuntu:act-latest
+-P macos-13=catthehacker/ubuntu:act-latest
+
+# Windows (limited support in act)
+-P windows-latest=catthehacker/ubuntu:act-latest
+
+# Environment variables for testing
+--env GITHUB_TOKEN=dummy_token_for_testing
+
+# Increase verbosity for debugging
+--verbose
+
+# Skip jobs that require secrets by default
+# Remove this line if you want to test with real secrets
+--job build
