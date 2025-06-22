@@ -16,9 +16,6 @@
 # Environment variables for testing
 --env GITHUB_TOKEN=dummy_token_for_testing
 
-# Increase verbosity for debugging
---verbose
-
 # Skip jobs that require secrets by default
 # Remove this line if you want to test with real secrets
 --job build

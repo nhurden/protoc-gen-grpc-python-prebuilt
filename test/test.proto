@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package test;
+
+// Simple test service for protoc-gen-grpc-python
+service TestService {
+  // Simple unary RPC
+  rpc SayHello(HelloRequest) returns (HelloResponse);
+  
+  // Server streaming RPC
+  rpc ListItems(ListRequest) returns (stream Item);
+  
+  // Client streaming RPC
+  rpc UploadItems(stream Item) returns (UploadResponse);
+  
+  // Bidirectional streaming RPC
+  rpc Chat(stream ChatMessage) returns (stream ChatMessage);
+}
+
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloResponse {
+  string message = 1;
+}
+
+message ListRequest {
+  int32 count = 1;
+}
+
+message Item {
+  int32 id = 1;
+  string name = 2;
+}
+
+message UploadResponse {
+  int32 count = 1;
+}
+
+message ChatMessage {
+  string user = 1;
+  string message = 2;
+}

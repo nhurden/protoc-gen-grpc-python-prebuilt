@@ -69,9 +69,6 @@ You can test the build process locally using [act](https://github.com/nektos/act
 ```bash
 # Test the build workflow
 act push
-
-# Test specific platform
-act push -j build-linux
 ```
 
 ## Contributing
