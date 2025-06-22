@@ -120,16 +120,12 @@ jobs:
         run: |
           bazel build ${{ matrix.bazel_config }} //src/compiler:grpc_python_plugin
 
-      - name: Copy and rename binary (Unix)
+      - name: Copy and rename binary
         if: runner.os != 'Windows'
         working-directory: grpc-source
         run: |
           mkdir -p ../artifacts
-          if [[ "${{ runner.os }}" == "macOS" ]]; then
-            find bazel-bin -name "grpc_python_plugin" -type f -perm +111 | head -1 | xargs -I {} cp {} ../artifacts/${{ matrix.artifact_name }}
-          else
-            cp bazel-bin/src/compiler/grpc_python_plugin ../artifacts/${{ matrix.artifact_name }}
-          fi
+          cp bazel-bin/src/compiler/grpc_python_plugin ../artifacts/${{ matrix.artifact_name }}
           chmod +x ../artifacts/${{ matrix.artifact_name }}
 
       - name: Upload artifacts
