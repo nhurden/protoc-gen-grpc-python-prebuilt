@@ -97,7 +97,6 @@ jobs:
           path: |
             ~/.cache/bazel
             ~/Library/Caches/bazel
-            %USERPROFILE%\AppData\Local\Temp\bazel
           key: bazel-${{ matrix.os }}-${{ matrix.grpc_version }}-${{ hashFiles('grpc-source/WORKSPACE', 'grpc-source/MODULE.bazel', 'grpc-source/**/*.bzl') }}
           restore-keys: |
             bazel-${{ matrix.os }}-${{ matrix.grpc_version }}-
@@ -120,13 +119,6 @@ jobs:
           fi
           chmod +x ../artifacts/${{ matrix.artifact_name }}
 
-      - name: Copy and rename binary (Windows)
-        if: runner.os == 'Windows'
-        working-directory: grpc-source
-        run: |
-          mkdir -p ../artifacts
-          cp bazel-bin/src/compiler/grpc_python_plugin.exe ../artifacts/${{ matrix.artifact_name }}
-
       - name: Install protoc (for testing)
         uses: arduino/setup-protoc@v3
         with:
@@ -139,7 +131,6 @@ jobs:
           python-version: "3.11"
 
       - name: Test plugin functionality
-        if: runner.os != 'Windows'
         run: |
           ./test/test-plugin.sh artifacts/${{ matrix.artifact_name }}
 
@@ -233,7 +224,6 @@ jobs:
             - **protoc-gen-grpc-python-linux-x86_64**: Linux x86_64
             - **protoc-gen-grpc-python-macos-x86_64**: macOS Intel
             - **protoc-gen-grpc-python-macos-arm64**: macOS Apple Silicon
-            - **protoc-gen-grpc-python-windows-x86_64.exe**: Windows x86_64
             - **checksums-${{ matrix.grpc_version }}.txt**: SHA256 checksums
 
             ## Verification

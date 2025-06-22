@@ -48,7 +48,4 @@ platforms:
   os: macos-latest
   bazel_config: --config=macos
   artifact_name: protoc-gen-grpc-python-macos-arm64
-- name: windows-x86_64
-  os: windows-latest
-  bazel_config: --config=windows
-  artifact_name: protoc-gen-grpc-python-windows-x86_64.exe
+

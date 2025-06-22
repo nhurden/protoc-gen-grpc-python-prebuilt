@@ -1,24 +1,18 @@
 # protoc-gen-grpc-python-prebuilt
 
 This repository builds and publishes prebuilt versions of the
-`protoc-gen-grpc-python` plugin, addressing [gRPC issue
-#26125](https://github.com/grpc/grpc/issues/26125) where the plugin is not
+`protoc-gen-grpc-python` plugin, addressing [gRPC issue #26125](https://github.com/grpc/grpc/issues/26125) where the plugin is not
 distributed with `grpcio-tools`.
 
 ## Problem
 
 The gRPC Python plugin (`grpc_python_plugin`) is not available as a prebuilt binary, forcing users to either:
+
 1. Build it from source
 2. Use non-standard Python-specific code generation instead of protoc plugins
 
 This makes it impossible for tools like `buf` to (locally) generate Python
 gRPC code, as they require protoc plugins.
-
-## Solution
-
-This repository automatically builds the `protoc-gen-grpc-python` plugin from
-the official gRPC source code and publishes prebuilt binaries as GitHub releases
-for multiple platforms and gRPC versions.
 
 ## Usage
 
@@ -56,7 +50,8 @@ plugins:
 - Linux x86_64
 - macOS x86_64 (Intel)
 - macOS arm64 (Apple Silicon)
-- Windows x86_64
+
+Windows is currently not supported due to the grpc repository having filenames that are too long for Windows.
 
 ## Supported gRPC Versions
 
