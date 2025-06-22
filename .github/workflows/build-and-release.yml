@@ -84,7 +84,7 @@ jobs:
           repository-cache: true
           bazelrc: |
             build --color=yes
-            build --curses=yes
+            build --curses=no
             build --show_timestamps
 
       - name: Checkout gRPC repository
