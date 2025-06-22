@@ -80,7 +80,7 @@ jobs:
         with:
           bazelisk-version: 1.26.0
           bazelisk-cache: true
-          disk-cache: ${{ github.workflow }}
+          disk-cache: ${{ github.workflow }}-${{ matrix.platform }}
           repository-cache: true
 
       - name: Checkout gRPC repository
