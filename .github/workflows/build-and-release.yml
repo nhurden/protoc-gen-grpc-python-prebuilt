@@ -158,5 +158,7 @@ jobs:
     if: needs.prepare.outputs.should_release == 'true'
     needs: [prepare, build]
     uses: ./.github/workflows/release.yml
+    permissions:
+      contents: write
     with:
       matrix: ${{ needs.prepare.outputs.matrix }}
