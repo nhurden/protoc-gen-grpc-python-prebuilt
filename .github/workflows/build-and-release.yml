@@ -145,6 +145,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Python dependencies (for testing)
+        # TODO(nhurden): Figure out which version of protobuf to use here
+        run: |
+          pip install protobuf grpcio==${{ matrix.grpc_version }}
 
       - name: Test plugin functionality
         run: |
