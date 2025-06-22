@@ -95,18 +95,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Bazel
-        uses: bazel-contrib/setup-bazel@0.15.0
-        with:
-          bazelisk-version: 1.26.0
-          bazelisk-cache: true
-          disk-cache: ${{ github.workflow }}-${{ matrix.platform }}
-          repository-cache: true
-          bazelrc: |
-            build --color=yes
-            build --curses=no
-            build --show_timestamps
-
       - name: Checkout gRPC repository
         uses: actions/checkout@v4
         with:
@@ -114,6 +102,20 @@ jobs:
           ref: ${{ matrix.grpc_tag }}
           path: grpc-source
           submodules: recursive
+
+      - name: Setup Bazel
+        uses: bazel-contrib/setup-bazel@0.15.0
+        with:
+          bazelisk-version: 1.26.0
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}-${{ matrix.platform }}
+          external-cache: true
+          repository-cache: true
+          module-root: grpc-source
+          bazelrc: |
+            build --color=yes
+            build --curses=no
+            build --show_timestamps
 
       - name: Cache Bazel build outputs
         uses: actions/cache@v4
