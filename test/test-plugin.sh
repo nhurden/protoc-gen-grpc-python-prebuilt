@@ -26,6 +26,10 @@ fi
 
 echo "Testing protoc-gen-grpc-python plugin: $PLUGIN_PATH"
 
+# Convert to absolute path before changing directories
+PLUGIN_PATH=$(realpath "$PLUGIN_PATH")
+echo "Absolute plugin path: $PLUGIN_PATH"
+
 # Create a temporary directory for testing
 TEST_DIR=$(mktemp -d)
 cd "$TEST_DIR"
