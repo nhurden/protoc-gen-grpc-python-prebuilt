@@ -20,6 +20,15 @@ on:
         default: false
 
 jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Ruff
+        uses: astral-sh/ruff-action@v3
+
   prepare:
     runs-on: ubuntu-24.04
     outputs:
