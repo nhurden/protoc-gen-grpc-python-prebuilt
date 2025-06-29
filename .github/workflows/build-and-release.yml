@@ -117,14 +117,16 @@ jobs:
         working-directory: grpc-source
         run: |
           mkdir -p ../artifacts
-          cp bazel-bin/src/compiler/grpc_python_plugin ../artifacts/${{ matrix.artifact_name }}
-          chmod +x ../artifacts/${{ matrix.artifact_name }}
+          # Include gRPC version in binary name to avoid conflicts
+          versioned_name="${{ matrix.artifact_name }}-${{ matrix.grpc_version }}"
+          cp bazel-bin/src/compiler/grpc_python_plugin "../artifacts/${versioned_name}"
+          chmod +x "../artifacts/${versioned_name}"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact_name }}-${{ matrix.grpc_version }}
-          path: artifacts/${{ matrix.artifact_name }}
+          path: artifacts/${{ matrix.artifact_name }}-${{ matrix.grpc_version }}
           retention-days: 30
 
       - name: Install protoc (for testing)
@@ -146,7 +148,7 @@ jobs:
 
       - name: Test plugin functionality
         run: |
-          ./test/test-plugin.sh artifacts/${{ matrix.artifact_name }}
+          ./test/test-plugin.sh artifacts/${{ matrix.artifact_name }}-${{ matrix.grpc_version }}
 
   release:
     if: needs.prepare.outputs.should_release == 'true'
