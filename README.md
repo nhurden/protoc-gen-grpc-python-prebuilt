@@ -47,7 +47,8 @@ plugins:
 
 ## Supported Platforms
 
-- Linux x86_64
+- Linux x86_64 (amd64)
+- Linux aarch64 (arm64)
 - macOS x86_64 (Intel)
 - macOS arm64 (Apple Silicon)
 
