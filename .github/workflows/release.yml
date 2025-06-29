@@ -58,6 +58,19 @@ jobs:
           echo "Checksums:"
           cat checksums-${{ matrix.grpc_version }}.txt
 
+      - name: Ensure draft release exists
+        id: check-draft
+        run: |
+          if gh release view ${{ github.ref_name }} --json isDraft --jq '.isDraft' | grep -q true; then
+            echo "Draft release exists for tag ${{ github.ref_name }}"
+          else
+            echo "Error: No draft release found for tag ${{ github.ref_name }}"
+            echo "Please ensure release-drafter has created a draft release first"
+            exit 1
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Upload artifacts to release
         uses: softprops/action-gh-release@v2
         with:
