@@ -1,4 +1,7 @@
 versions:
+- version: v1.73.1
+  tag: v1.73.1
+  active: true
 - version: v1.73.0
   tag: v1.73.0
   active: true
