@@ -1,0 +1,159 @@
+name: Build and Release protoc-gen-grpc-python
+
+on:
+  push:
+    branches: [main]
+    tags:
+      - "v*"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      grpc_version:
+        description: "Specific gRPC version to build (e.g., v1.71.0)"
+        required: false
+        type: string
+      force_release:
+        description: "Force create release even if it exists"
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      should_release: ${{ steps.check-release.outputs.should_release }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install yq
+        uses: mikefarah/yq@v4.44.6
+
+      - name: Generate build matrix
+        id: set-matrix
+        run: |
+          if [ -n "${{ github.event.inputs.grpc_version }}" ]; then
+            # Manual trigger with specific version
+            echo "Building specific version: ${{ github.event.inputs.grpc_version }}"
+            matrix=$(cat grpc-versions.yaml | yq eval '.platforms[] as $platform | .versions[] | select(.version == "${{ github.event.inputs.grpc_version }}") | {"grpc_version": .version, "grpc_tag": .tag, "platform": $platform.name, "os": $platform.os, "bazel_config": $platform.bazel_config, "artifact_name": $platform.artifact_name}' -o json | jq -s '{"include": .}')
+          else
+            # Build all active versions
+            matrix=$(cat grpc-versions.yaml | yq eval '.platforms[] as $platform | .versions[] | select(.active == true) | {"grpc_version": .version, "grpc_tag": .tag, "platform": $platform.name, "os": $platform.os, "bazel_config": $platform.bazel_config, "artifact_name": $platform.artifact_name}' -o json | jq -s '{"include": .}')
+          fi
+          # Use multiline output to properly handle JSON
+          {
+            echo "matrix<<EOF"
+            echo "$matrix"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+          echo "Generated matrix:"
+          echo "$matrix" | jq .
+
+      - name: Check if should create release
+        id: check-release
+        run: |
+          should_release="false"
+          if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == refs/tags/* ]]; then
+            should_release="true"
+          elif [[ "${{ github.event.inputs.force_release }}" == "true" ]]; then
+            should_release="true"
+          fi
+          echo "should_release=$should_release" >> $GITHUB_OUTPUT
+          echo "Should create release: $should_release"
+
+  build:
+    needs: prepare
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Checkout gRPC repository @ ${{ matrix.grpc_tag }}
+        uses: actions/checkout@v4
+        with:
+          repository: grpc/grpc
+          ref: ${{ matrix.grpc_tag }}
+          path: grpc-source
+          submodules: recursive
+
+      - name: Setup Bazel
+        uses: bazel-contrib/setup-bazel@0.15.0
+        with:
+          bazelisk-version: 1.26.0
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}-${{ matrix.platform }}
+          external-cache: true
+          repository-cache: true
+          module-root: grpc-source
+          bazelrc: |
+            build --color=yes
+            build --curses=no
+            build --show_timestamps
+
+      - name: Cache Bazel build outputs
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/bazel
+            ~/Library/Caches/bazel
+          key: bazel-${{ matrix.os }}-${{ matrix.grpc_version }}-${{ hashFiles('grpc-source/WORKSPACE', 'grpc-source/MODULE.bazel', 'grpc-source/**/*.bzl') }}
+          restore-keys: |
+            bazel-${{ matrix.os }}-${{ matrix.grpc_version }}-
+            bazel-${{ matrix.os }}-
+
+      - name: Build protoc-gen-grpc-python
+        working-directory: grpc-source
+        run: |
+          bazel build ${{ matrix.bazel_config }} //src/compiler:grpc_python_plugin
+
+      - name: Copy and rename binary
+        if: runner.os != 'Windows'
+        working-directory: grpc-source
+        run: |
+          mkdir -p ../artifacts
+          cp bazel-bin/src/compiler/grpc_python_plugin ../artifacts/${{ matrix.artifact_name }}
+          chmod +x ../artifacts/${{ matrix.artifact_name }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}-${{ matrix.grpc_version }}
+          path: artifacts/${{ matrix.artifact_name }}
+          retention-days: 30
+
+      - name: Install protoc (for testing)
+        uses: arduino/setup-protoc@v3
+        with:
+          version: "31.1"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Python (for testing)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Python dependencies (for testing)
+        # TODO(nhurden): Figure out which version of protobuf to use here
+        run: |
+          pip install protobuf grpcio==${{ matrix.grpc_version }}
+
+      - name: Test plugin functionality
+        run: |
+          ./test/test-plugin.sh artifacts/${{ matrix.artifact_name }}
+
+  release:
+    if: needs.prepare.outputs.should_release == 'true'
+    needs: [prepare, build]
+    uses: ./.github/workflows/release.yml
+    permissions:
+      contents: write
+    with:
+      matrix: ${{ needs.prepare.outputs.matrix }}

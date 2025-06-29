@@ -1,0 +1,25 @@
+name: Lint
+
+on:
+  push:
+
+jobs:
+  shellcheck:
+    name: ShellCheck
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          version: v0.10.0
+
+  ruff:
+    name: Ruff
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Ruff
+        uses: astral-sh/ruff-action@v3
