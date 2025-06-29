@@ -73,7 +73,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Checkout gRPC repository
+      - name: Checkout gRPC repository @ ${{ matrix.grpc_tag }}
         uses: actions/checkout@v4
         with:
           repository: grpc/grpc
