@@ -9,36 +9,18 @@ on:
         type: string
 
 jobs:
-  get-versions:
-    runs-on: ubuntu-24.04
-    outputs:
-      versions: ${{ steps.extract-versions.outputs.versions }}
-    steps:
-      - name: Extract unique versions
-        id: extract-versions
-        run: |
-          # Extract unique gRPC versions from the matrix
-          versions=$(echo '${{ inputs.matrix }}' | jq -r '.include[].grpc_version' | sort -u | jq -R . | jq -s . -c)
-          echo "versions=$versions" >> $GITHUB_OUTPUT
-          echo "Extracted versions: $versions"
-
   release:
-    needs: [get-versions]
     runs-on: ubuntu-24.04
     permissions:
       contents: write
-    strategy:
-      matrix:
-        grpc_version: ${{ fromJson(needs.get-versions.outputs.versions) }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download all artifacts for version
+      - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          pattern: "*-${{ matrix.grpc_version }}"
           merge-multiple: true
           path: release-artifacts
 
@@ -52,11 +34,11 @@ jobs:
         run: |
           for file in *; do
             if [[ -f "$file" ]]; then
-              sha256sum "$file" >> checksums-${{ matrix.grpc_version }}.txt
+              sha256sum "$file" >> checksums.txt
             fi
           done
           echo "Checksums:"
-          cat checksums-${{ matrix.grpc_version }}.txt
+          cat checksums.txt
 
       - name: Ensure draft release exists
         id: check-draft
