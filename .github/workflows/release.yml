@@ -58,42 +58,10 @@ jobs:
           echo "Checksums:"
           cat checksums-${{ matrix.grpc_version }}.txt
 
-      - name: Create release
-        uses: ncipollo/release-action@v1
+      - name: Upload artifacts to release
+        uses: softprops/action-gh-release@v2
         with:
-          tag: ${{ matrix.grpc_version }}
-          name: gRPC Python Plugin ${{ matrix.grpc_version }}
-          artifacts: "release-artifacts/*"
-          token: ${{ github.token }}
-          allowUpdates: true
-          draft: false
-          prerelease: false
-          body: |
-            # protoc-gen-grpc-python ${{ matrix.grpc_version }}
-
-            Prebuilt binaries of the gRPC Python plugin compiled from [gRPC ${{ matrix.grpc_version }}](https://github.com/grpc/grpc/releases/tag/${{ matrix.grpc_version }}).
-
-            ## Usage
-
-            1. Download the appropriate binary for your platform
-            2. Make it executable (Unix/macOS): `chmod +x protoc-gen-grpc-python-*`
-            3. Use with protoc:
-               ```bash
-               protoc --plugin=protoc-gen-grpc-python=/path/to/binary \
-                      --grpc-python_out=. \
-                      your_service.proto
-               ```
-
-            ## Files
-
-            - **protoc-gen-grpc-python-linux-x86_64**: Linux x86_64
-            - **protoc-gen-grpc-python-macos-x86_64**: macOS Intel
-            - **protoc-gen-grpc-python-macos-arm64**: macOS Apple Silicon
-            - **checksums-${{ matrix.grpc_version }}.txt**: SHA256 checksums
-
-            ## Verification
-
-            Verify the downloaded binary using SHA256:
-            ```bash
-            sha256sum -c checksums-${{ matrix.grpc_version }}.txt
-            ```
+          tag_name: ${{ github.event.release.tag_name }}
+          files: release-artifacts/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
