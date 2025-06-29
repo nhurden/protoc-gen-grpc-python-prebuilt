@@ -1,0 +1,44 @@
+name-template: 'gRPC Python Plugin $RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+change-title-escapes: '\<*_&'
+version-resolver:
+  major:
+    labels:
+      - 'major'
+  minor:
+    labels:
+      - 'minor'
+  patch:
+    labels:
+      - 'patch'
+  default: patch
+template: |
+  ## Changes
+
+  $CHANGES
+
+  ## Usage
+
+  1. Download the appropriate binary for your platform
+  2. Make it executable (Unix/macOS): `chmod +x protoc-gen-grpc-python-*`
+  3. Use with protoc:
+     ```bash
+     protoc --plugin=protoc-gen-grpc-python=/path/to/binary \
+            --grpc-python_out=. \
+            your_service.proto
+     ```
+
+  ## Files
+
+  - **protoc-gen-grpc-python-linux-x86_64**: Linux x86_64
+  - **protoc-gen-grpc-python-macos-x86_64**: macOS Intel
+  - **protoc-gen-grpc-python-macos-arm64**: macOS Apple Silicon
+  - **checksums-$RESOLVED_VERSION.txt**: SHA256 checksums
+
+  ## Verification
+
+  Verify the downloaded binary using SHA256:
+  ```bash
+  sha256sum -c checksums-$RESOLVED_VERSION.txt
+  ```
