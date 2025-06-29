@@ -61,7 +61,16 @@ jobs:
       - name: Upload artifacts to release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.event.release.tag_name }}
+          tag_name: ${{ github.ref_name }}
           files: release-artifacts/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish release
+        uses: release-drafter/release-drafter@v6
+        with:
+          tag: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          publish: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
