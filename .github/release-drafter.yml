@@ -34,8 +34,7 @@ template: |
   This release contains binaries for multiple gRPC versions. Each binary is named with the format `protoc-gen-grpc-python-{platform}-{grpc_version}`:
 
   - **protoc-gen-grpc-python-linux-x86_64-{version}**: Linux x86_64
-  - **protoc-gen-grpc-python-macos-x86_64-{version}**: macOS Intel
-  - **protoc-gen-grpc-python-macos-arm64-{version}**: macOS Apple Silicon
+  - **protoc-gen-grpc-python-macos-universal-{version}**: macOS Universal (Intel + Apple Silicon)
   - **checksums.txt**: SHA256 checksums for all binaries
 
   ## Verification
