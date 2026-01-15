@@ -40,11 +40,11 @@ versions:
   active: false
 platforms:
 - name: linux-x86_64
-  os: ubuntu-24.04
+  os: ubuntu-22.04
   bazel_config: --config=linux
   artifact_name: protoc-gen-grpc-python-linux-x86_64
 - name: linux-aarch64
-  os: ubuntu-24.04-arm
+  os: ubuntu-22.04-arm
   bazel_config: --config=linux
   artifact_name: protoc-gen-grpc-python-linux-aarch64
 - name: macos-universal
