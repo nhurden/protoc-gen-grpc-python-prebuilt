@@ -39,6 +39,8 @@ versions:
   tag: v1.68.0
   active: false
 platforms:
+  # On the oldest supported ubuntu runner to maximize compatibility of the
+  # resulting binaries
 - name: linux-x86_64
   os: ubuntu-22.04
   bazel_config: --config=linux
