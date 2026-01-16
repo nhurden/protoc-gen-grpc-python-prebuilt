@@ -58,15 +58,6 @@ Windows is currently not supported due to the grpc repository having filenames t
 
 See the [Releases](https://github.com/nhurden/protoc-gen-grpc-python-prebuilt/releases) page for available versions.
 
-## Building Locally
-
-You can test the build process locally using [act](https://github.com/nektos/act).
-
-```bash
-# Test the build workflow
-act push
-```
-
 ## Contributing
 
 Feel free to open issues or pull requests to:
