@@ -20,6 +20,8 @@ on:
 
 jobs:
   prepare:
+    # On the latest supported option to maximize compatibility of the
+    # resulting binaries
     runs-on: ubuntu-22.04
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
