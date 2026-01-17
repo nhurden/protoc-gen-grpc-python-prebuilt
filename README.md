@@ -63,8 +63,13 @@ See the [Releases](https://github.com/nhurden/protoc-gen-grpc-python-prebuilt/re
 You can test the build process locally using [act](https://github.com/nektos/act).
 
 ```bash
-# Test the build workflow
-act push
+just test
+```
+
+Since cross-compiling isn't supported, a specific architecture needs to be chosen, both for the runner and the target:
+
+``` bash
+act push --matrix platform:linux-x86_64 --container-architecture linux/amd64
 ```
 
 ## Contributing

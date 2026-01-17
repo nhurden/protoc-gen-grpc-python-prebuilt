@@ -1,17 +1,7 @@
--P ubuntu-latest=catthehacker/ubuntu:act-latest
--P ubuntu-22.04=catthehacker/ubuntu:act-22.04
--P ubuntu-20.04=catthehacker/ubuntu:act-20.04
-
-# Use GitHub runners for macOS (requires GitHub runners or skip)
--P macos-latest=catthehacker/ubuntu:act-latest
--P macos-13=catthehacker/ubuntu:act-latest
-
-# Windows (limited support in act)
--P windows-latest=catthehacker/ubuntu:act-latest
+-P ubuntu-latest=catthehacker/ubuntu:full-latest
+-P ubuntu-24.04=catthehacker/ubuntu:full-24.04
+-P ubuntu-22.04=catthehacker/ubuntu:full-22.04
+-P ubuntu-20.04=catthehacker/ubuntu:full-20.04
 
 # Environment variables for testing
 --env GITHUB_TOKEN=dummy_token_for_testing
-
-# Skip jobs that require secrets by default
-# Remove this line if you want to test with real secrets
---job build

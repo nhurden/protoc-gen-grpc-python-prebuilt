@@ -123,6 +123,7 @@ jobs:
           chmod +x "../artifacts/${versioned_name}"
 
       - name: Upload artifacts
+        if: ${{ !env.ACT }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: ${{ matrix.artifact_name }}-${{ matrix.grpc_version }}
@@ -130,23 +131,27 @@ jobs:
           retention-days: 30
 
       - name: Install protoc (for testing)
+        if: ${{ !env.ACT }}
         uses: arduino/setup-protoc@v3
         with:
           version: "31.1"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Python (for testing)
+        if: ${{ !env.ACT }}
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.13"
           cache: "pip"
 
       - name: Install Python dependencies (for testing)
+        if: ${{ !env.ACT }}
         # TODO(nhurden): Figure out which version of protobuf to use here
         run: |
           pip install protobuf grpcio==${{ matrix.grpc_version }}
 
       - name: Test plugin functionality
+        if: ${{ !env.ACT }}
         run: |
           ./test/test-plugin.sh artifacts/${{ matrix.artifact_name }}-${{ matrix.grpc_version }}
 
