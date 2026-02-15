@@ -119,7 +119,12 @@ jobs:
           mkdir -p ../artifacts
           # Include gRPC version in binary name to avoid conflicts
           versioned_name="${{ matrix.artifact_name }}-${{ matrix.grpc_version }}"
-          cp bazel-bin/src/compiler/grpc_python_plugin "../artifacts/${versioned_name}"
+          # gRPC v1.74.0+ renamed the output from grpc_python_plugin to grpc_python_plugin_binary
+          if [ -f bazel-bin/src/compiler/grpc_python_plugin_binary ]; then
+            cp bazel-bin/src/compiler/grpc_python_plugin_binary "../artifacts/${versioned_name}"
+          else
+            cp bazel-bin/src/compiler/grpc_python_plugin "../artifacts/${versioned_name}"
+          fi
           chmod +x "../artifacts/${versioned_name}"
 
       - name: Upload artifacts
