@@ -1,15 +1,36 @@
 versions:
+- version: v1.78.0
+  tag: v1.78.0
+  active: true
+- version: v1.76.0
+  tag: v1.76.0
+  active: true
+- version: v1.75.1
+  tag: v1.75.1
+  active: true
+- version: v1.75.0
+  tag: v1.75.0
+  active: true
+- version: v1.74.0
+  tag: v1.74.0
+  active: false
 - version: v1.73.1
   tag: v1.73.1
   active: true
 - version: v1.73.0
   tag: v1.73.0
   active: true
+- version: v1.72.2
+  tag: v1.72.2
+  active: false
 - version: v1.72.1
   tag: v1.72.1
   active: false
 - version: v1.72.0
   tag: v1.72.0
+  active: false
+- version: v1.71.2
+  tag: v1.71.2
   active: false
 - version: v1.71.1
   tag: v1.71.1
@@ -35,9 +56,6 @@ versions:
 - version: v1.68.1
   tag: v1.68.1
   active: false
-- version: v1.68.0
-  tag: v1.68.0
-  active: false
 platforms:
   # On the oldest supported ubuntu runner to maximize compatibility of the
   # resulting binaries
@@ -53,4 +71,3 @@ platforms:
   os: macos-15
   bazel_config: --config=macos
   artifact_name: protoc-gen-grpc-python-macos-universal
-
