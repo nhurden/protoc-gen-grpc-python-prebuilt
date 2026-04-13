@@ -97,7 +97,7 @@ jobs:
             build --show_timestamps
 
       - name: Cache Bazel build outputs
-        uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: |
             ~/.cache/bazel
