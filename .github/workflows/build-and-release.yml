@@ -127,6 +127,14 @@ jobs:
           fi
           chmod +x "../artifacts/${versioned_name}"
 
+      - name: Sign and verify macOS binary
+        if: runner.os == 'macOS'
+        run: |
+          binary="artifacts/${{ matrix.artifact_name }}-${{ matrix.grpc_version }}"
+          # Sign every universal-binary slice, including x86_64.
+          codesign --force --sign - "$binary"
+          codesign --verify --strict --all-architectures "$binary"
+
       - name: Upload artifacts
         if: ${{ !env.ACT }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
