@@ -13,11 +13,12 @@ Script to update gRPC versions in grpc-versions.yaml
 Fetches the latest releases from the gRPC GitHub repository
 """
 
+from typing import Any
+
 import requests
-import yaml
 import typer
+import yaml
 from pydantic import BaseModel
-from typing import List, Dict, Any
 
 
 class Release(BaseModel):
@@ -34,7 +35,7 @@ class Release(BaseModel):
         return self.tag_name
 
 
-def fetch_grpc_releases(limit: int = 20) -> List[Release]:
+def fetch_grpc_releases(limit: int = 20) -> list[Release]:
     """Fetch the latest gRPC releases from GitHub API"""
     url = "https://api.github.com/repos/grpc/grpc/releases"
     params = {"per_page": limit}
@@ -52,13 +53,13 @@ def fetch_grpc_releases(limit: int = 20) -> List[Release]:
     
     return stable_releases
 
-def load_current_config(config_path: str = "grpc-versions.yaml") -> Dict[str, Any]:
+def load_current_config(config_path: str = "grpc-versions.yaml") -> dict[str, Any]:
     """Load the current version configuration"""
     with open(config_path, 'r') as f:
         return yaml.safe_load(f)
 
-def update_versions(config: Dict[str, Any], new_releases: List[Release], 
-                   keep_active: int = 5, mark_new_active: bool = True) -> Dict[str, Any]:
+def update_versions(config: dict[str, Any], new_releases: list[Release], 
+                   keep_active: int = 5, mark_new_active: bool = True) -> dict[str, Any]:
     """Update the version configuration with new releases"""
     
     # Get existing versions
@@ -109,7 +110,7 @@ def update_versions(config: Dict[str, Any], new_releases: List[Release],
     
     return config
 
-def save_config(config: Dict[str, Any], config_path: str = "grpc-versions.yaml"):
+def save_config(config: dict[str, Any], config_path: str = "grpc-versions.yaml"):
     """Save the updated configuration"""
     with open(config_path, 'w') as f:
         yaml.dump(config, f, default_flow_style=False, sort_keys=False)
@@ -153,9 +154,6 @@ def main(
                 
     except requests.RequestException as e:
         print(f"Error fetching releases: {e}")
-        raise typer.Exit(1)
-    except Exception as e:
-        print(f"Error: {e}")
         raise typer.Exit(1)
 
 if __name__ == "__main__":
