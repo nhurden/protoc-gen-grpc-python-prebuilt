@@ -1,4 +1,34 @@
 versions:
+- version: v1.84.0
+  tag: v1.84.0
+  active: true
+- version: v1.83.1
+  tag: v1.83.1
+  active: true
+- version: v1.83.0
+  tag: v1.83.0
+  active: true
+- version: v1.82.2
+  tag: v1.82.2
+  active: true
+- version: v1.82.1
+  tag: v1.82.1
+  active: true
+- version: v1.82.0
+  tag: v1.82.0
+  active: false
+- version: v1.81.1
+  tag: v1.81.1
+  active: false
+- version: v1.81.0
+  tag: v1.81.0
+  active: false
+- version: v1.80.0
+  tag: v1.80.0
+  active: false
+- version: v1.78.1
+  tag: v1.78.1
+  active: false
 - version: v1.78.0
   tag: v1.78.0
   active: true
@@ -28,33 +58,6 @@ versions:
   active: false
 - version: v1.72.0
   tag: v1.72.0
-  active: false
-- version: v1.71.2
-  tag: v1.71.2
-  active: false
-- version: v1.71.1
-  tag: v1.71.1
-  active: false
-- version: v1.71.0
-  tag: v1.71.0
-  active: false
-- version: v1.70.2
-  tag: v1.70.2
-  active: false
-- version: v1.70.1
-  tag: v1.70.1
-  active: false
-- version: v1.70.0
-  tag: v1.70.0
-  active: false
-- version: v1.69.0
-  tag: v1.69.0
-  active: false
-- version: v1.68.2
-  tag: v1.68.2
-  active: false
-- version: v1.68.1
-  tag: v1.68.1
   active: false
 platforms:
   # On the oldest supported ubuntu runner to maximize compatibility of the
