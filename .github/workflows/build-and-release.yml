@@ -168,6 +168,17 @@ jobs:
         run: |
           ./test/test-plugin.sh artifacts/${{ matrix.artifact_name }}-${{ matrix.grpc_version }}
 
+  build-result:
+    name: Build result
+    # always() so a failed matrix fails this check instead of skipping it
+    if: always()
+    needs: [prepare, build]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Fail if any build failed or was cancelled
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1
+
   release:
     if: needs.prepare.outputs.should_release == 'true'
     needs: [prepare, build]
