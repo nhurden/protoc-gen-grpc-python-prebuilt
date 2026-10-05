@@ -145,10 +145,10 @@ jobs:
 
       - name: Install protoc (for testing)
         if: ${{ !env.ACT }}
-        uses: arduino/setup-protoc@v3
+        uses: taiki-e/install-action@861a07ce7084f55488e375df125cdc99bba60eb7 # v2.87.23
         with:
-          version: "31.1"
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          tool: protoc@3.31.1
+          fallback: none
 
       - name: Install Python (for testing)
         if: ${{ !env.ACT }}
