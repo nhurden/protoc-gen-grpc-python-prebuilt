@@ -1,4 +1,5 @@
 -P ubuntu-latest=catthehacker/ubuntu:full-latest
+-P ubuntu-26.04=catthehacker/ubuntu:full-24.04
 -P ubuntu-24.04=catthehacker/ubuntu:full-24.04
 -P ubuntu-22.04=catthehacker/ubuntu:full-22.04
 -P ubuntu-20.04=catthehacker/ubuntu:full-20.04
